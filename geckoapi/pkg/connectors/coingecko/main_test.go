@@ -6,8 +6,10 @@ import (
 )
 
 func TestLoadCoins(t *testing.T) {
+	api := NewGeckoApi()
+
 	// AMOUNT OF COINS
-	count, err := LoadCoins()
+	count, err := api.LoadCoins()
 
 	// CHECKING ERROR
 	assert.NoError(t, err)
@@ -17,15 +19,17 @@ func TestLoadCoins(t *testing.T) {
 }
 
 func TestGetRates(t *testing.T) {
+	api := NewGeckoApi()
+
 	// GETTING RATE FOR BTC
-	price, err := GetRates(ticker["BTC"], ticker["USDT"])
+	price, err := api.GetRates(ticker["BTC"], ticker["USDT"])
 
 	assert.NoError(t, err)
 
 	assert.True(t, price > 0, "Price should be greater than zero")
 
 	// GETTING RATE FOR ETH
-	price, err = GetRates(ticker["ETH"], ticker["USDT"])
+	price, err = api.GetRates(ticker["ETH"], ticker["USDT"])
 
 	assert.NoError(t, err)
 
@@ -34,9 +38,10 @@ func TestGetRates(t *testing.T) {
 
 // TEST FOR INCORRECT CURR
 func TestGetRatesError(t *testing.T) {
+	api := NewGeckoApi()
 
 	// RANDOM RATE
-	_, err := GetRates("nonexistentcoin", "USDT")
+	_, err := api.GetRates("nonexistentcoin", "USDT")
 
 	// EXPECTED ERROR
 	assert.Error(t, err)
