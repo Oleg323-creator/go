@@ -20,6 +20,7 @@ func TestLoadCoins(t *testing.T) {
 }
 
 func TestGetRates(t *testing.T) {
+
 	api := NewGeckoApi()
 
 	// GETTING RATE FOR BTC

@@ -1,4 +1,4 @@
-package main
+package connectors
 
 import (
 	"fmt"
@@ -6,41 +6,28 @@ import (
 	"geckoapi1/pkg/connectors/crypto_compare"
 )
 
+const CoingeckoType = "Coingecko"
+const CryptoCompType = "Crypto Compare"
+
 type ConnectorAPI interface {
 	LoadCoins() (int, error)
 	GetRates(from, to string) (map[string]interface{}, error)
 }
 
-func releaseInter(c ConnectorAPI, from string, to string) {
-	fmt.Println(c.LoadCoins())
-	fmt.Println(c.GetRates(from, to))
-}
+func NewConnector(conType string) (ConnectorAPI, error) {
 
-type Connector struct {
-	ConnectorAPI
-}
-
-func NewConnector(conType string) (*Connector, error) {
-	const coingeckoType = "Coingecko"
-	const cryptoCompType = "Crypto Compare"
-
-	if conType == coingeckoType {
-		return &Connector{
-			coingecko.NewGeckoApi(),
-		}, nil
-	} else if conType == cryptoCompType {
-		return &Connector{
-			crypto_compare.NewCryptoCompareAPI(),
-		}, nil
+	if conType == CoingeckoType {
+		return coingecko.NewGeckoApi(), nil
+	} else if conType == CryptoCompType {
+		return crypto_compare.NewCryptoCompareAPI(), nil
 	} else {
 		return nil, fmt.Errorf("unknown connector type")
 	}
 }
 
 func main() {
-
 	//GECKO IMPLEMENTATION
-	conn, err := NewConnector("Coingecko")
+	conn, err := NewConnector(CoingeckoType)
 	if err != nil {
 		return
 	}
@@ -56,7 +43,7 @@ func main() {
 	fmt.Println(rate)
 
 	//CRYPTO_COMPARE IMPLEMENTATION
-	conn, err = NewConnector("Crypto Compare")
+	conn, err = NewConnector(CryptoCompType)
 	if err != nil {
 		return
 	}

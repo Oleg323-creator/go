@@ -25,7 +25,7 @@ func (g *GeckoApi) LoadCoins() (int, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Available coins:")
+	fmt.Println("Available coins:", len(*list))
 
 	return len(*list), nil
 }
@@ -36,8 +36,11 @@ func (g *GeckoApi) GetRates(from, to string) (map[string]interface{}, error) {
 		"ETH":  "ethereum",
 		"USDT": "usd",
 	}
-	fromParam := []string{strings.ToLower(ticker[from])}
-	toParam := []string{strings.ToLower(ticker[to])}
+	from = ticker[from]
+	to = ticker[to]
+
+	fromParam := []string{strings.ToLower(from)}
+	toParam := []string{strings.ToLower(to)}
 	result := make(map[string]interface{})
 
 	sp, err := cg.SimplePrice(fromParam, toParam)
@@ -46,7 +49,7 @@ func (g *GeckoApi) GetRates(from, to string) (map[string]interface{}, error) {
 	}
 
 	if rate, ok := (*sp)[from][to]; ok {
-		result[to] = float64(rate)
+		result[ticker[to]] = float64(rate)
 		return result, nil
 	} else {
 		return nil, fmt.Errorf("conversion rate not found")
