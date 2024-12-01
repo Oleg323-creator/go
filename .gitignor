@@ -1,0 +1,7 @@
+.env
+
+vendor/
+
+.exe
+
+node_modules/
